@@ -1,0 +1,25 @@
+{
+  "name": "atm-mnt-backend",
+  "version": "1.0.0",
+  "description": "API server",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "CraftByte",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "crypto": "0.0.3",
+    "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "mongoose": "^4.10.8",
+    "morgan": "^1.8.2"
+  }
+}
