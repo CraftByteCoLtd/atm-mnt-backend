@@ -36,25 +36,12 @@ exports.authLoginPost = function(req, res) {
                 // if user is found and password is right
                 // create a token
 
-                /**
-
-                    TODO:
-                    - Change the sign input to userName/rules
-
-                 */
                 var signObject = {
-                    "authRules": {
-                        "isAtmVaulter": true,
-                        "isAtmTechnician": true,
-                        "isDispatcherManager": true,
-                        "isWareHouseManager": true,
-                        "isAdmin": true
-                    },
-                    "userPwd": "km9RxTt9IDxIPlKSkEzqsUnAad4=",
-                    "userName": "snow.white",
-                    "lastName": "Snow",
-                    "firstName": "John",
-
+                    "authRules": user.authRules,
+                    "userPwd": user.userPwd,
+                    "userName": user.userName,
+                    "lastName": user.lastName,
+                    "firstName": user.firstName
                 }
 
                 var token = jwt.sign(signObject, req.app.get('superDuperSecret'), {
