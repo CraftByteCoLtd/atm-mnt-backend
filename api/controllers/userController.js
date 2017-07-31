@@ -84,15 +84,15 @@ exports.userUpdatePost = function(req, res) {
     User.findById(req.body.id, function(error, userPrevInfo) {
 
         if (error) throw error;
-         
-            userPrevInfo.firstName = req.body.firstName,
+
+        userPrevInfo.firstName = req.body.firstName,
             userPrevInfo.lastName = req.body.lastName,
             userPrevInfo.userName = req.body.userName,
             userPrevInfo.userPwd = req.body.userPwd,
             userPrevInfo.userEmails = req.body.userEmails,
             userPrevInfo.userPhones = req.body.userPhones,
             userPrevInfo.authRules = req.body.authRules
-        
+
         userPrevInfo.save(function(error) {
             if (error) throw error;
 
