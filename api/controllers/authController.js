@@ -1,21 +1,24 @@
-var jwt = require('jsonwebtoken');
-var helper = require('../helpers/hashText');
+let jwt = require('jsonwebtoken');
+let helper = require('../helpers/hashText');
 
-var User = require('../models/userModel');
+let User = require('../models/userModel');
 
 exports.authLoginPost = function(req, res) {
 
-    var pram = {
+    let pram = {
         userName: req.body.userName,
         userPwd: req.body.userPwd
     }
 
     // find the user
     User.findOne({
-        userName: pram.userName
+        userName: pram.userName,
+        isActive: true
     }, function(err, user) {
 
-        var cryptPassword = helper.hash(pram.userPwd);
+        let cryptPassword = helper.hash(pram.userPwd);
+
+
         if (err) throw err;
 
         if (!user) {
@@ -29,7 +32,7 @@ exports.authLoginPost = function(req, res) {
             if (user.userPwd != cryptPassword) {
                 res.json({
                     success: false,
-                    message: 'Authentication failed. Wrong password.'
+                    message: 'Authentication failed. Wrong credentials.'
                 });
             } else {
 
@@ -40,8 +43,8 @@ exports.authLoginPost = function(req, res) {
                     "authRules": user.authRules,
                     "userPwd": user.userPwd,
                     "userName": user.userName,
-                    "lastName": user.lastName,
-                    "firstName": user.firstName
+                    "fullName":user.fullName,
+                    "id":user.id
                 }
 
                 var token = jwt.sign(signObject, req.app.get('superDuperSecret'), {
