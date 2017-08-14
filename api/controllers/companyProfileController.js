@@ -1,12 +1,12 @@
-var moment = require('moment');
-var _ = require('lodash');
-var CompanyProfile = require('../models/companyProfileModel');
+let moment = require('moment');
+let _ = require('lodash');
+let CompanyProfile = require('../models/companyProfileModel');
 
-var currentUTC = moment().utc().toDate();
+let currentUTC = moment().utc().toDate();
 
 
 exports.companyDetailByIdGet = function(req, res) {
-    var uniqId = req.params.id;
+    let uniqId = req.params.id;
     if (!uniqId) {
         res.json({
             message: 'No parameters provided!',
@@ -48,8 +48,7 @@ exports.companyListGet = function(req, res) {
 exports.companyProfileCreatePost = function(req, res) {
     //Create A new User in the database
 
-    console.log(req.body);
-    var newCompanyProfile = new CompanyProfile({
+    let newCompanyProfile = new CompanyProfile({
         companyId: req.body.companyId,
         companyName: req.body.companyName,
         companyDetail: req.body.companyDetail,

@@ -2,13 +2,13 @@
 =            UserSchema : mongo collection name : users            =
 ==================================================================*/
 
-var mongoose = require('mongoose');
-var moment = require('moment');
+let mongoose = require('mongoose');
+let moment = require('moment');
 
-var crypto = require('crypto');
+let crypto = require('crypto');
 
-var Schema = mongoose.Schema;
-var userSchema = new Schema({
+let Schema = mongoose.Schema;
+let userSchema = new Schema({
         firstName: {
             type: String,
             require: true
@@ -25,6 +25,10 @@ var userSchema = new Schema({
         userPwd: {
             type: String,
             require: true
+        },
+        isActive:{
+            type:Boolean,
+            require:true
         },
         userEmails: [{
             desc: String,
@@ -72,7 +76,7 @@ userSchema.methods.hash = function(inputText) {
 
 userSchema.pre('save', function(next) {
 
-    var currentDate = moment().utc().toDate();
+    let currentDate = moment().utc().toDate();
 
     // change the updated_at field to current date
     this.updated = currentDate;
@@ -82,5 +86,5 @@ userSchema.pre('save', function(next) {
     next();
 });
 
-var UserModel = mongoose.model('User', userSchema);
+let UserModel = mongoose.model('User', userSchema);
 module.exports = UserModel;

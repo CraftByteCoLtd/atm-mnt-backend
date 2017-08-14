@@ -2,14 +2,14 @@
 =            CompanyProfileSchema : mongo collection name : company-profile            =
 ==================================================================*/
 
-var mongoose = require('mongoose');
-var moment = require('moment');
+let mongoose = require('mongoose');
+let moment = require('moment');
 
 
-var crypto = require('crypto');
+let crypto = require('crypto');
 
-var Schema = mongoose.Schema;
-var companyProfileSchema = new Schema({
+let Schema = mongoose.Schema;
+let companyProfileSchema = new Schema({
         companyId: {
             type: String,
             require: true,
@@ -79,7 +79,7 @@ companyProfileSchema.methods.hash = function(inputText) {
 
 companyProfileSchema.pre('save', function(next) {
 
-    var currentDate = moment().utc().toDate();
+    let currentDate = moment().utc().toDate();
 
     // change the updated_at field to current date
     this.updated = currentDate;
@@ -89,5 +89,5 @@ companyProfileSchema.pre('save', function(next) {
     next();
 });
 
-var companyProfileModel = mongoose.model('CompanyProfile', companyProfileSchema);
+let companyProfileModel = mongoose.model('CompanyProfile', companyProfileSchema);
 module.exports = companyProfileModel;

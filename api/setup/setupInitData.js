@@ -1,6 +1,6 @@
-var moment = require('moment');
-var User = require('../models/userModel');
-var currentUTC = moment().utc().toDate();
+let moment = require('moment');
+let User = require('../models/userModel');
+let currentUTC = moment().utc().toDate();
 
 
 // Populate the initial data
@@ -8,11 +8,12 @@ exports.setupInitData = function(req, res) {
 
     User.collection.drop(function(error) {
 
-        var adminUser = new User({
+        let adminUser = new User({
             "firstName": "Admin",
             "lastName": "PowerUser",
             "userName": "admin",
             "userPwd": "1234",
+            "isActive": "true",
             "userEmails": [{
                 "desc": "work",
                 "email": "admin.puser@gmail.com"

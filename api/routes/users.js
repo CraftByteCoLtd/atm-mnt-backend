@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
 // Require controller modules
-var userController = require('../controllers/userController');
+let userController = require('../controllers/userController');
 
 // User Routes
 

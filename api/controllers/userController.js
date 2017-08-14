@@ -1,7 +1,7 @@
-var moment = require('moment');
-var User = require('../models/userModel');
+let moment = require('moment');
+let User = require('../models/userModel');
 
-var currentUTC = moment().utc().toDate();
+let currentUTC = moment().utc().toDate();
 
 // Get All Users list
 exports.userListGet = function(req, res) {
@@ -21,11 +21,12 @@ exports.userListGet = function(req, res) {
 
 exports.userCreatePost = function(req, res) {
     //Create A new User in the database
-    var newUser = User({
+    let newUser = User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         userName: req.body.userName,
         userPwd: req.body.userPwd,
+        isActive: req.body.isActive,
         userEmails: req.body.userEmails,
         userPhones: req.body.userPhones,
         authRules: req.body.authRules,
@@ -55,7 +56,7 @@ exports.userCreatePost = function(req, res) {
 
 
 exports.userDetailGet = function(req, res) {
-    var uniqId = req.params.id;
+    let uniqId = req.params.id;
     if (!uniqId) {
         res.json({
             message: 'No parameters provided!',
@@ -89,6 +90,7 @@ exports.userUpdatePost = function(req, res) {
             userPrevInfo.lastName = req.body.lastName,
             userPrevInfo.userName = req.body.userName,
             userPrevInfo.userPwd = req.body.userPwd,
+            userPrevInfo.isActive = req.body.isActive,
             userPrevInfo.userEmails = req.body.userEmails,
             userPrevInfo.userPhones = req.body.userPhones,
             userPrevInfo.authRules = req.body.authRules
