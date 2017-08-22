@@ -47,15 +47,17 @@ const indexRoute 	= require('./api/routes/index');
 const authRoute 	= require('./api/routes/auth');
 const usersRoute 	= require('./api/routes/users');
 const companyProfileRoute = require('./api/routes/company');
+const atmRoute    = require('./api/routes/atm');
+const technicianTicket = require('./api/routes/technicianTicket');
+const part	= require('./api/routes/part');
 
 
-/**
-	TODO:
-	- Remove the setup Routes
- */
-
+/*----------  Remove  ----------*/
 const setupInitData = require('./api/setup/setupInitData')
-app.get('/setup', setupInitData.setupInitData);
+app.get('/setup/admin', setupInitData.setupAdmin);
+app.get('/setup/atm', setupInitData.setupAtm);
+app.get('/setup/id', setupInitData.setupCounter);
+app.get('/setup/tt', setupInitData.setupTechnicianTicket);
 
 /*----------  Remove above  ----------*/
 
@@ -68,16 +70,12 @@ app.use('/auth',authRoute)
 
 // Restrict Routs List
 app.use('/*', require('./api/middlewares/authValidate.js'));
-app.use('/manage-user',usersRoute);
-app.use('/manage-company',companyProfileRoute);
+app.use('/manage-user', usersRoute);
+app.use('/manage-company', companyProfileRoute);
+app.use('/manage-atm', atmRoute);
+app.use('/manage-tt', technicianTicket);
+app.use('/manage-part', part);
 
-
-/**
-
-	TODO:
-	- Add another route here!
-
- */
 
 
 app.listen(PORT, () => {
