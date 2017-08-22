@@ -43,6 +43,7 @@ let userSchema = new Schema({
             isWareHouseManager: Boolean,
             isDispatcherManager: Boolean,
             isAtmTechnician: Boolean,
+            isTreasurer:Boolean,
             isAtmVaulter: Boolean
         },
         created: Date,
@@ -58,11 +59,6 @@ let userSchema = new Schema({
 
 );
 
-
-userSchema.virtual('url')
-    .get(function() {
-        return '/manage-user/user-info/' + this._id;
-    });
 
 userSchema.virtual('fullName')
     .get(function() {

@@ -6,7 +6,8 @@ let currentUTC = moment().utc().toDate();
 // Get All Users list
 exports.userListGet = function(req, res) {
     User.find({})
-        .sort('-created')
+        .select('firstName lastName isActive id updated')
+        .sort('-updated')
         .exec(function(error, result) {
             if (error)
                 res.send(error);
@@ -21,15 +22,25 @@ exports.userListGet = function(req, res) {
 
 exports.userCreatePost = function(req, res) {
     //Create A new User in the database
+    let authRules = 
+        {
+            "isAdmin": req.body.authRules.isAdmin ? true : false,
+            "isWareHouseManager": req.body.authRules.isWareHouseManager ? true : false,
+            "isDispatcherManager": req.body.authRules.isDispatcherManager ? true : false,
+            "isAtmTechnician": req.body.authRules.isAtmTechnician ? true : false,
+            "isAtmVaulter": req.body.authRules.isAtmVaulter ? true : false,
+            "isTreasurer": req.body.authRules.isTreasurer ? true : false
+            }
+
     let newUser = User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         userName: req.body.userName,
         userPwd: req.body.userPwd,
-        isActive: req.body.isActive,
+        isActive:  req.body.isActive? true: false,
         userEmails: req.body.userEmails,
         userPhones: req.body.userPhones,
-        authRules: req.body.authRules,
+        authRules: authRules,
         created: currentUTC
     });
 
@@ -86,20 +97,29 @@ exports.userUpdatePost = function(req, res) {
 
         if (error) throw error;
 
-        userPrevInfo.firstName = req.body.firstName,
-            userPrevInfo.lastName = req.body.lastName,
-            userPrevInfo.userName = req.body.userName,
-            userPrevInfo.userPwd = req.body.userPwd,
-            userPrevInfo.isActive = req.body.isActive,
-            userPrevInfo.userEmails = req.body.userEmails,
-            userPrevInfo.userPhones = req.body.userPhones,
-            userPrevInfo.authRules = req.body.authRules
+        let authRules = {
+            "isAdmin": req.body.authRules.isAdmin ? true : false,
+            "isWareHouseManager": req.body.authRules.isWareHouseManager ? true : false,
+            "isDispatcherManager": req.body.authRules.isDispatcherManager ? true : false,
+            "isAtmTechnician": req.body.authRules.isAtmTechnician ? true : false,
+            "isAtmVaulter": req.body.authRules.isAtmVaulter ? true : false,
+            "isTreasurer": req.body.authRules.isTreasurer ? true : false
+            }
+
+            userPrevInfo.firstName = req.body.firstName;
+            userPrevInfo.lastName = req.body.lastName;
+            userPrevInfo.userName = req.body.userName;
+            userPrevInfo.userPwd = req.body.userPwd;
+            userPrevInfo.isActive = req.body.isActive? true : false;
+            userPrevInfo.userEmails = req.body.userEmails;
+            userPrevInfo.userPhones = req.body.userPhones;
+            userPrevInfo.authRules = authRules;
 
         userPrevInfo.save(function(error) {
             if (error) throw error;
 
             res.json({
-                message: 'Update new User: ' + userPrevInfo.firstName + ' ' + userPrevInfo.lastName + ' succesfully',
+                message: 'Update User: ' + userPrevInfo.firstName + ' ' + userPrevInfo.lastName + ' succesfully',
                 success: true
             });
 
