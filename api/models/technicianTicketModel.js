@@ -30,8 +30,8 @@ let TechnicianTicketSchema = new Schema({
         tTicketStatus: {
             type: String
         },
-        tTicketRepairedParts: [],
-        atmMachine:{
+        tTicketRepairedPart: {},
+        atmMachineID:{
             type: String,
             require: true
         },
@@ -64,7 +64,7 @@ TechnicianTicketSchema.pre('save', function(next) {
 
     // running new id only the new record. 
     
-    if (tTicket.tTicketID === undefined || tTicket.tTicketID === "new") {
+    if (tTicket.tTicketID === undefined || tTicket.tTicketID === null || tTicket.tTicketID === "new") {
         Counter.findByIdAndUpdate({
             _id: COUNTER_ID
         }, {

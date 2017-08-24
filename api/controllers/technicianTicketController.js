@@ -24,14 +24,14 @@ exports.ttListGet = function(req, res) {
 
 exports.ttCreatePost = function(req, res) {
     let newTt = Tt({
-        tTicketID: req.body.tTicketID,
+        tTicketID: "new",
         tTicketCreated: currentUTC,
         tTicketSymptom: req.body.tTicketSymptom,
         tTicketSolution: req.body.tTicketSolution,
         tTicketCreatedBy: req.body.tTicketCreatedBy,
         tTicketResponsiblePerson: req.body.tTicketResponsiblePerson,
         tTicketStatus: req.body.tTicketStatus,
-        tTicketRepairedParts: req.body.tTicketRepairedParts,
+        tTicketRepairedPart: req.body.tTicketRepairedPart,
         atmMachineID: req.body.atmMachineID,
         updated: currentUTC
     });
@@ -86,6 +86,8 @@ exports.ttUpdatePost = function(req, res) {
 
     Tt.findById(req.body.id, function(error, ttPrevInfo) {
 
+        console.log(JSON.stringify(req.body));
+
         if (error) throw error;
 
         ttPrevInfo.tTicketID = req.body.tTicketID;
@@ -94,7 +96,7 @@ exports.ttUpdatePost = function(req, res) {
         ttPrevInfo.tTicketCreatedBy = req.body.tTicketCreatedBy;
         ttPrevInfo.tTicketResponsiblePerson = req.body.tTicketResponsiblePerson;
         ttPrevInfo.tTicketStatus = req.body.tTicketStatus;
-        ttPrevInfo.tTicketRepairedParts = req.body.tTicketRepairedParts;
+        ttPrevInfo.tTicketRepairedPart = req.body.tTicketRepairedPart;
         ttPrevInfo.atmMachineID = req.body.atmMachineID;
         ttPrevInfo.updated = currentUTC
 
