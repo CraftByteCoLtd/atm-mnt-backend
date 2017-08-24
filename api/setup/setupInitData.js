@@ -162,20 +162,12 @@ exports.setupTechnicianTicket = function(req, res) {
             }
         ,
         tTicketStatus: "open",
-        tTicketRepairedParts:[{
+        tTicketRepairedParts:{
             "partID": "P001",
             "partName": "NumberPad",
             "partSerialNumber":"XPAD001"
         },
-        {
-            "partID": "002",
-            "partName": "EnterButton",
-            "partSerialNumber":"ENPAD001"
-        }
-
-        ],
-        atmMachine:
-            {atmMachineID: "ATM001"}
+        atmMachine: "ATM001"
         ,
         updated: currentUTC
     })

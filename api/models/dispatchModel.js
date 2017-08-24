@@ -6,13 +6,6 @@ let mongoose = require('mongoose');
 let moment = require('moment');
 
 
-
-/*
-
-TODO ::  REVISED THIS AGAIN
-
-*/
-
 let Schema = mongoose.Schema;
 let dispatchSchema = new Schema({
         dtID: {
@@ -22,13 +15,13 @@ let dispatchSchema = new Schema({
         },
         dtResponsiblePersons: [],
         dtAtms:[]
-        dtTechincianTickets: [],
+        dtTechnicianTickets: [],
         dtStatus:{
-            type:Boolean,
+            type:string,
             require:true
         },
         dtWithdrawStatus: {
-            type:Boolean,
+            type:string,
             require:true
         },
         dtWithdrawBalance: {
@@ -37,8 +30,6 @@ let dispatchSchema = new Schema({
         }
         created: Date,
         updated: Date
-// TODO cannot continutes because need some depending data from Technician ticker and Partinventory , PartType
-// Will ba back
 
 
     }, {

@@ -16,10 +16,20 @@ http://localhost:3000/manage-part/parts
 router.get('/parts', partController.partListGet);
 
 
+/* GET request for list of all parts  type
+http://localhost:3000/manage-part/part-type
+*/
+router.get('/part-type', partController.partTypeListGet);
+
+
+/* GET request for list of atm for d
+http://localhost:3000/manage-part/atm-list
+*/
+router.get('/part-atm-list', partController.ttAtmListGet);
+
 /* POST request for creating part.
 http://localhost:3000/manage-part/create
 */
-
 router.post('/create', partController.partCreatePost);
 
 
