@@ -1,5 +1,6 @@
 let moment = require('moment');
 let Part = require('../models/partModel');
+let Atm = require('../models/atmModel');
 
 let currentUTC = moment().utc().toDate();
 
@@ -7,6 +8,37 @@ let currentUTC = moment().utc().toDate();
 exports.partListGet = function(req, res) {
     Part.find({})
         .sort('-updated')
+        .exec(function(error, result) {
+            if (error)
+                res.send(error);
+            else
+                res.status(200);
+            res.send({
+                data: result
+            });
+        });
+};
+
+// Get All Part Type
+exports.partTypeListGet = function(req, res) {
+    Part.distinct('partType')
+        .exec(function(error, result) {
+            if (error)
+                res.send(error);
+            else
+                res.status(200);
+            res.send({
+                data: result
+            });
+        });
+};
+
+
+// Get All ATM  list
+exports.ttAtmListGet = function(req, res) {
+    Atm.find({})
+        .select('atmMachineID _id')
+        .sort('atmMachineID')
         .exec(function(error, result) {
             if (error)
                 res.send(error);

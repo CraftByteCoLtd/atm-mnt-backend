@@ -60,8 +60,8 @@ partSchema.pre('save', function(next) {
     newPart.updated = currentDate;
 
     // running new id only the new record. 
-    
-    if (newPart.partID === undefined || newPart.partID === "new") {
+    console.log(JSON.stringify(newPart));
+    if (newPart.partID === undefined || newPart.partID === null || newPart.partID === "new") {
         Counter.findByIdAndUpdate({
             _id: COUNTER_ID
         }, {
