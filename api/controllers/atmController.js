@@ -27,7 +27,7 @@ exports.atmCreatePost = function(req, res) {
         atmBalance: req.body.atmBalance,
         atmLocation: req.body.atmLocation,
         atmNote: req.body.atmNote,
-        atmStatus: req.body.atmStatus ? true : false,
+        atmStatus: req.body.atmStatus ? "online" : "offline",
         atmUpdatedBy: req.body.atmUpdatedBy,
         created: currentUTC
     });
@@ -87,7 +87,7 @@ exports.atmUpdatePost = function(req, res) {
             atmPrevInfo.atmBalance = req.body.atmBalance,
             atmPrevInfo.atmLocation = req.body.atmLocation,
             atmPrevInfo.atmNote = req.body.atmNote,
-            atmPrevInfo.atmStatus = req.body.atmStatus ? true : false,
+            atmPrevInfo.atmStatus = req.body.atmStatus ? "online": "offline",
             atmPrevInfo.atmUpdatedBy = req.body.atmUpdatedBy,
 
             atmPrevInfo.save(function(error) {

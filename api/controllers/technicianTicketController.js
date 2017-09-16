@@ -21,6 +21,44 @@ exports.ttListGet = function(req, res) {
         });
 };
 
+// Get All Technician Ticket list by status
+exports.ttListGetByStatus = function(req, res) {
+    
+    var statusStr = req.query.status || 'open';
+
+    Tt.find({})
+        .where('tTicketStatus').equals(statusStr)
+        .sort('-updated')
+        .exec(function(error, result) {
+            if (error)
+                res.send(error);
+            else
+                res.status(200);
+            res.send({
+                data: result
+            });
+        });
+};
+
+// Get All Technician Ticket list by atmIDs
+exports.ttListByAtmsPost = function(req, res) {
+    
+    
+    let atmMachineIDs = req.body.selectedAtmIDs;
+    Tt.find({})
+        .where('atmMachineID').in(atmMachineIDs)
+        .where('tTicketStatus').equals('open')
+        .exec(function(error, result) {
+            if (error)
+                res.send(error);
+            else
+                res.status(200);
+            res.send({
+                data: result
+            });
+        });
+};
+
 
 exports.ttCreatePost = function(req, res) {
     let newTt = Tt({

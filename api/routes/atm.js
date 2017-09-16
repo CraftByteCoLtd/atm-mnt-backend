@@ -20,6 +20,7 @@ http://localhost:3000/manage-atm/atms
 router.get('/atms', atmController.atmListGet);
 
 
+
 /* POST request for creating atm.*/
 router.post('/create', atmController.atmCreatePost);
 

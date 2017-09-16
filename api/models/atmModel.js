@@ -26,7 +26,7 @@ let atmSchema = new Schema({
             require: true
         },
         atmStatus:{
-            type:Boolean,
+            type:String,
             require:true
         },
         created: Date,

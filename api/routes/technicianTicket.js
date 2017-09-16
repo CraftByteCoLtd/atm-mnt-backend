@@ -31,12 +31,22 @@ http://localhost:3000/manage-tt/tt-atm-list
 */
 router.get('/tt-atm-list', ttController.ttAtmListGet);
 
+/* GET request for t ticket list by status
+http://localhost:3000/manage-tt/tt-list-by-status
+*/
+router.get('/tt-list-by-status', ttController.ttListGetByStatus);
 
 
 /* POST request for all part by atm
 http://localhost:3000/manage-tt/tt-part-list/
 */
 router.post('/tt-part-list', ttController.ttTechnicianPartListByAtmMachineIDPost);
+
+
+/* POST technician Ticket by atms
+http://localhost:3000/manage-tt/tt-list-by-atms/
+*/
+router.post('/tt-list-by-atms', ttController.ttListByAtmsPost);
 
 
 /* POST request for creating tt.

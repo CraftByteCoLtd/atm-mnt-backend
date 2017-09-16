@@ -4,6 +4,8 @@
 
 let mongoose = require('mongoose');
 let moment = require('moment');
+let Counter = require('../models/counterModel');
+
 
 
 let Schema = mongoose.Schema;
@@ -14,23 +16,18 @@ let dispatchSchema = new Schema({
             require: true
         },
         dtResponsiblePersons: [],
-        dtAtms:[]
+        dtAtms:[],
         dtTechnicianTickets: [],
         dtStatus:{
-            type:string,
-            require:true
-        },
-        dtWithdrawStatus: {
-            type:string,
+            type: String,
             require:true
         },
         dtWithdrawBalance: {
             type: Number,
             require: true
-        }
+        },
         created: Date,
         updated: Date
-
 
     }, {
         toObject: {
@@ -53,10 +50,33 @@ dispatchSchema.virtual('url')
 dispatchSchema.pre('save', function(next) {
 
     let currentDate = moment().utc().toDate();
+    let dTicket = this;
 
-    // change the updated_at field to current date
-    this.updated = currentDate;
-    next();
+
+    const PREFIX = "DT";
+    const COUNTER_ID = "dtID";
+
+    dTicket.updated = currentDate;
+
+    // running new id only the new record. 
+    
+    if (dTicket.dtID === undefined || dTicket.dtID === null || dTicket.dtID === "new") {
+        Counter.findByIdAndUpdate({
+            _id: COUNTER_ID
+        }, {
+            $inc: {
+                seq: 1
+            }
+        }, function(error, counter) {
+            if (error)
+                return next(error);
+
+            dTicket.dtID = PREFIX + counter.seq;
+            next();
+        });
+    } else {
+        next();
+    }
 });
 
 let DispatchTicketModel = mongoose.model('DispatchTicket', dispatchSchema);

@@ -123,6 +123,15 @@ exports.setupCounter = function(req, res) {
             if (error)
             console.log(error)});
 
+
+        let pTicketCounter = new Counter({
+            "_id" : "partID",
+            "seq" : 1.0
+        });
+        pTicketCounter.save(function(error) {
+            if (error)
+            console.log(error)});
+
         let dTicketCounter = new Counter({
             "_id" : "dtID",
             "seq" : 1.0
@@ -130,6 +139,7 @@ exports.setupCounter = function(req, res) {
         dTicketCounter.save(function(error) {
             if (error)
             console.log(error)});
+
         
         res.json({
                     "success": true,

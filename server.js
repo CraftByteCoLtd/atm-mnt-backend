@@ -50,6 +50,7 @@ const companyProfileRoute = require('./api/routes/company');
 const atmRoute    = require('./api/routes/atm');
 const technicianTicket = require('./api/routes/technicianTicket');
 const part	= require('./api/routes/part');
+const dispatchTicket = require('./api/routes/dispatchTicket');
 
 
 /*----------  Remove  ----------*/
@@ -75,6 +76,7 @@ app.use('/manage-company', companyProfileRoute);
 app.use('/manage-atm', atmRoute);
 app.use('/manage-tt', technicianTicket);
 app.use('/manage-part', part);
+app.use('/manage-dt', dispatchTicket);
 
 
 
