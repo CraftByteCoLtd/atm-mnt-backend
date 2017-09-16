@@ -7,6 +7,8 @@ let User = require('../models/userModel');
 let Part = require('../models/partModel');
 let Atm = require('../models/atmModel');
 let Dispatch = require('../models/dispatchModel');
+let Treasury = require('../models/treasuryModel');
+let TreasuryLog = require('../models/treasuryLogModel');
 
 
 let currentUTC = moment().utc().toDate();
@@ -218,4 +220,61 @@ exports.dtActiveListGet = function(req, res) {
                 data: result
             });
         });
+};
+
+
+exports.dtDoWithdrawPost = function(req, res) {
+
+    Dispatch.findById(req.body.id, function(error, dpPrevInfo) {
+
+        console.log(JSON.stringify(req.body));
+
+        if (error) throw error;
+
+        dpPrevInfo.dtStatus = req.body.dtStatus;
+        dpPrevInfo.dtWithdrawBalance = req.body.dtWithdrawBalance;
+        updated = currentUTC;
+
+        dpPrevInfo.save(function(error) {
+
+            if (error) throw error;
+
+
+            Treasury.findOne({},function(error, tsrInfo) {
+
+                if (error) throw error;
+
+                let prevBalance = 0;
+                prevBalance = tsrInfo.treasuryBalance;
+
+                let changedBalance = tsrInfo.treasuryBalance - req.body.dtWithdrawBalance;
+                console.log(changedBalance);
+
+                let trsLog = TreasuryLog({
+                    oldBalance: tsrInfo.treasuryBalance,
+                    newBalance: changedBalance,
+                    by:req.body.by
+                });
+
+                trsLog.save(function(error){
+                    if (!error) console.log('Saved treasury log');
+                })
+
+                tsrInfo.treasuryBalance = changedBalance;
+                created = req.body.created;
+                updated = currentUTC;
+                tsrInfo.save(function(error) {
+                    if (!error){
+                        res.json({
+                            message: 'Dispatch Ticket status change to withdraw succesfully',
+                            success: true,
+                        });
+                    }
+                });
+
+            });
+
+        });
+    });
+
 };

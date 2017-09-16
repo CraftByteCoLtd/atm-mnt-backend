@@ -53,5 +53,9 @@ http://localhost:3000/manage-dt/update
 router.post('/update', dtController.dtUpdatePost);
 
 
+/* POST request for update dt.
+http://localhost:3000/manage-dt/
+*/
+router.post('/do-withdraw', dtController.dtDoWithdrawPost);
 
 module.exports = router;

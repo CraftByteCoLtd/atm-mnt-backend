@@ -51,6 +51,7 @@ const atmRoute    = require('./api/routes/atm');
 const technicianTicket = require('./api/routes/technicianTicket');
 const part	= require('./api/routes/part');
 const dispatchTicket = require('./api/routes/dispatchTicket');
+const treasury = require('./api/routes/treasury');
 
 
 /*----------  Remove  ----------*/
@@ -59,6 +60,7 @@ app.get('/setup/admin', setupInitData.setupAdmin);
 app.get('/setup/atm', setupInitData.setupAtm);
 app.get('/setup/id', setupInitData.setupCounter);
 app.get('/setup/tt', setupInitData.setupTechnicianTicket);
+app.get('/setup/treasury', setupInitData.setupTreasury);
 
 /*----------  Remove above  ----------*/
 
@@ -77,6 +79,7 @@ app.use('/manage-atm', atmRoute);
 app.use('/manage-tt', technicianTicket);
 app.use('/manage-part', part);
 app.use('/manage-dt', dispatchTicket);
+app.use('/manage-treasury', treasury);
 
 
 

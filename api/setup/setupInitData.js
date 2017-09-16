@@ -3,6 +3,7 @@ let User = require('../models/userModel');
 let Atm = require('../models/atmModel');
 let TechnicianTicket = require('../models/technicianTicketModel');
 let Counter = require('../models/counterModel');
+let Treasury = require('../models/treasuryModel');
 
 
 
@@ -198,4 +199,40 @@ exports.setupTechnicianTicket = function(req, res) {
             }
         });
     })
+};
+
+
+exports.setupTreasury = function(req, res) {
+
+    /*====================================
+    =            Initial Treasury             =
+    ====================================*/
+
+    Treasury.collection.drop(function(error) {
+
+        let treasury = new Treasury ({
+            treasuryNote: 'Treasury',
+            treasuryBalance: 30000,
+            created: currentUTC,
+            updated: currentUTC,
+          
+        })
+
+        treasury.save(function(error) {
+
+            if (error)
+
+                res.json({
+                    "sucess": false,
+                    "message": error.errmsg
+                });
+
+            else
+                res.json({
+                    "success": true,
+                    "message": "succesfully insert Treasury "
+                });
+        });
+    });
+
 };
