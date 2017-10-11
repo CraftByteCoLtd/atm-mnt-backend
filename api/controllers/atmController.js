@@ -7,7 +7,7 @@ let currentUTC = moment().utc().toDate();
 exports.atmListGet = function(req, res) {
     Atm.find({})
         .sort('-updated')
-        .select('atmMachineID id atmBalance atmStatus updated')
+        .select('atmMachineID id atmBalance atmStatus updated atmLocation atmNote')
         .exec(function(error, result) {
             if (error)
                 res.send(error);

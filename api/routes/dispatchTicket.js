@@ -54,8 +54,40 @@ router.post('/update', dtController.dtUpdatePost);
 
 
 /* POST request for update dt.
-http://localhost:3000/manage-dt/
+http://localhost:3000/manage-dt/do-withdraw
 */
 router.post('/do-withdraw', dtController.dtDoWithdrawPost);
+
+
+/* POST request for update dt.
+http://localhost:3000/manage-dt/do-recieved
+*/
+router.post('/do-recieved', dtController.dtUpdateRecievedStatus);
+
+/* POST request for update atm balance.
+http://localhost:3000/manage-dt/do-updated-atm-balance
+*/
+router.post('/do-updated-atm-balance', dtController.dtUpdateBalancePost);
+
+/* POST request for update atm balance.
+http://localhost:3000/manage-dt/do-mark-completed
+*/
+router.post('/do-mark-completed', dtController.dtUpdateStatusCompletedPost);
+
+
+/* POST request for update the status of dispatch to close and update the returned
+bad bills to treasury
+http://localhost:3000/manage-dt/do-closed
+*/
+router.post('/do-closed', dtController.dtDoClosedPost);
+
+
+
+/* POST request for update the status of tt to closed with some solution note
+http://localhost:3000/manage-dt/do-tt-solution
+*/
+router.post('/do-tt-solution', dtController.dtUpdateTtSolution);
+
+
 
 module.exports = router;

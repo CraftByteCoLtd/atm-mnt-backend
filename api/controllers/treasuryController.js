@@ -78,7 +78,8 @@ exports.treasuryUpdatePost = function(req, res) {
         let trsLog = TreasuryLog({
             oldBalance: tsrInfo.treasuryBalance,
             newBalance: req.body.treasuryBalance,
-            updatedBy: req.body.updatedBy
+            updatedBy: req.body.updatedBy,
+            logType: req.body.logType
 
         });
         trsLog.save(function(error){

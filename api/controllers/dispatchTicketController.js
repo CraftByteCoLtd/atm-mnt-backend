@@ -70,20 +70,110 @@ exports.dtUpdatePost = function(req, res) {
                 message: 'Update Dispatch Ticket succesfully',
                 success: true
             });
-
-
         })
 
     });
-
 };
+
+
+exports.dtUpdateStatusCompletedPost = function(req, res) {
+    let updatedKey = {
+        "_id": req.body._id,
+        "dtStatus": 'recieved'
+    }
+
+    let updatedValue = {
+       "dtStatus": 'completed'
+    }
+
+    Dispatch.update(updatedKey, updatedValue, function(err) {
+        if (err) {
+            throw err
+        }
+        res.json({
+            message: 'Mark as Completed Dispatch Ticket succesfully',
+                success: true
+        });
+
+    });
+};
+
+
+exports.dtUpdateBalancePost = function(req, res) {
+
+    let pramAtm = req.body.updateAtm;
+    let updatedKey = {
+        "_id": req.body._id,
+        "dtAtms.atm._id": pramAtm.atm._id,
+        "dtAtms.atm.atmMachineID": pramAtm.atm.atmMachineID
+    }
+
+    let updatedValue = {
+        "$set": {
+            "dtAtms.$.deposit": req.body.deposit,
+            "dtAtms.$.badBill": req.body.badBill,
+            "dtAtms.$.dtAtmStatus": 'closed',
+            "dtAtms.$.atm.atmBalance": req.body.Total,
+            "dtAtms.$.actualRemaining": req.body.actualRemaining
+        }
+    }
+
+    Dispatch.update(updatedKey, updatedValue, function(err) {
+        if (err) {
+            throw err
+        }
+
+        let _idAtm = {
+            "_id": pramAtm.atm._id,
+            "atmMachineID": pramAtm.atm.atmMachineID
+        }
+
+        let _valBalance = {
+            "atmBalance": req.body.Total,
+            "updated":currentUTC,
+            "atmUpdatedBy.fullName":req.body.updatedBy
+        }
+
+        Atm.update(_idAtm, _valBalance, function(atmErr) {
+            if (atmErr) {
+                throw atmErr
+            }
+            res.json({
+                message: 'Update Dispatch Ticket succesfully',
+                success: true
+            });
+        })
+
+
+    })
+};
+
+
+
+
+exports.dtUpdateRecievedStatus = function(req, res) {
+    Dispatch.findById(req.body.id, function(error, dpPrevInfo) {
+        if (error) throw error;
+        dpPrevInfo.dtStatus = req.body.dtStatus;
+        updated = currentUTC;
+        dpPrevInfo.save(function(error) {
+            if (error) throw error;
+
+            res.json({
+                message: 'Update Dispatch Ticket Status succesfully',
+                success: true
+            });
+        })
+
+    });
+}
 
 
 
 // Get ATM list by Limit Balance
 exports.atmListByBalanceGet = function(req, res) {
     let filterBalance = 0;
-    filterBalance = parseInt(req.query.b) || 0; 
+    filterBalance = parseInt(req.query.b) || 0;
     Atm.find({})
         .where('atmBalance').lte(filterBalance)
         .sort('-atmBalance')
@@ -93,7 +183,7 @@ exports.atmListByBalanceGet = function(req, res) {
                 res.send(error);
             else
                 res.status(200);
-                res.send({
+            res.send({
                 data: result
             });
         });
@@ -103,48 +193,50 @@ exports.atmListByBalanceGet = function(req, res) {
 // Get ATM list by Limit Balance and not include Atm in open dispatch ticket
 exports.atmListByBalanceNotinDispatchGet = function(req, res) {
     let filterBalance = 0;
-    filterBalance = parseInt(req.query.b) || 0; 
+    filterBalance = parseInt(req.query.b) || 0;
 
     let excludeEditID = req.query.eid;
 
     let atmsInDispatchProcess = [];
     async.waterfall([
-            
-        checkIsAtmExistInDispatch = function(callback){
-           let Dp = Dispatch.find({});
+
+        checkIsAtmExistInDispatch = function(callback) {
+            let Dp = Dispatch.find({});
             if (excludeEditID) {
                 Dp.where('_id').ne(excludeEditID)
             }
 
             Dp.where('dtStatus').equals('open')
             Dp.select('dtAtms')
-            Dp.exec(function(error,atms){
-                atmsInDispatchProcess = _.map(atms,(o)=>{ 
-                    return _.map(o.dtAtms,(i)=>{return i.atm.atmMachineID });
+            Dp.exec(function(error, atms) {
+                atmsInDispatchProcess = _.map(atms, (o) => {
+                    return _.map(o.dtAtms, (i) => {
+                        return i.atm.atmMachineID
+                    });
                 })
                 atmsInDispatchProcess = _.flattenDeep(atmsInDispatchProcess);
                 callback();
-            }); 
+            });
         },
-        findAtmOnlyIdNotInDispatch = function(callback){
-             Atm.find({})
+        findAtmOnlyIdNotInDispatch = function(callback) {
+            Atm.find({})
                 .where('atmBalance').lte(filterBalance)
                 .where('atmMachineID').nin(atmsInDispatchProcess)
                 .sort('-atmBalance')
                 .select('atmMachineID id atmBalance atmStatus atmLocation updated')
-                .exec(callback);    
+                .exec(callback);
 
         }
 
-        ],function(error,result){
-            if (error)
-                res.send(error);
-            else
-                res.status(200);
-                res.send({
-                data: result
-            });
+    ], function(error, result) {
+        if (error)
+            res.send(error);
+        else
+            res.status(200);
+        res.send({
+            data: result
         });
+    });
 };
 
 
@@ -209,7 +301,7 @@ exports.dtListGet = function(req, res) {
 
 exports.dtActiveListGet = function(req, res) {
     Dispatch.find({})
-        .where('dtStatus').ne('closed')
+        // .where('dtStatus').ne('closed')
         .sort('-updated')
         .exec(function(error, result) {
             if (error)
@@ -240,7 +332,7 @@ exports.dtDoWithdrawPost = function(req, res) {
             if (error) throw error;
 
 
-            Treasury.findOne({},function(error, tsrInfo) {
+            Treasury.findOne({}, function(error, tsrInfo) {
 
                 if (error) throw error;
 
@@ -248,15 +340,15 @@ exports.dtDoWithdrawPost = function(req, res) {
                 prevBalance = tsrInfo.treasuryBalance;
 
                 let changedBalance = tsrInfo.treasuryBalance - req.body.dtWithdrawBalance;
-                console.log(changedBalance);
 
                 let trsLog = TreasuryLog({
                     oldBalance: tsrInfo.treasuryBalance,
                     newBalance: changedBalance,
-                    by:req.body.by
+                    updatedBy: req.body.updatedBy,
+                    logType: req.body.logType
                 });
 
-                trsLog.save(function(error){
+                trsLog.save(function(error) {
                     if (!error) console.log('Saved treasury log');
                 })
 
@@ -264,7 +356,7 @@ exports.dtDoWithdrawPost = function(req, res) {
                 created = req.body.created;
                 updated = currentUTC;
                 tsrInfo.save(function(error) {
-                    if (!error){
+                    if (!error) {
                         res.json({
                             message: 'Dispatch Ticket status change to withdraw succesfully',
                             success: true,
@@ -277,4 +369,104 @@ exports.dtDoWithdrawPost = function(req, res) {
         });
     });
 
+};
+
+exports.dtDoClosedPost = function(req, res) {
+
+    Dispatch.findById(req.body.id, function(error, dpPrevInfo) {
+
+        if (error) throw error;
+
+        dpPrevInfo.dtStatus = req.body.dtStatus;
+        dpPrevInfo.dtReturnBalance = req.body.dtReturnBalance;
+        updated = currentUTC;
+
+        dpPrevInfo.save(function(error) {
+
+            if (error) throw error;
+
+
+            Treasury.findOne({}, function(error, tsrInfo) {
+
+                if (error) throw error;
+
+                let prevBalance = 0;
+                prevBalance = tsrInfo.treasuryBalance;
+
+                let changedBalance = tsrInfo.treasuryBalance + req.body.dtReturnBalance;
+
+                let trsLog = TreasuryLog({
+                    oldBalance: tsrInfo.treasuryBalance,
+                    newBalance: changedBalance,
+                    updatedBy: req.body.updatedBy,
+                    logType: req.body.logType
+                });
+
+                trsLog.save(function(error) {
+                    if (!error) console.log('Saved treasury log');
+                })
+
+                tsrInfo.treasuryBalance = changedBalance;
+                created = req.body.created;
+                updated = currentUTC;
+                tsrInfo.save(function(error) {
+                    if (!error) {
+                        res.json({
+                            message: 'Dispatch Ticket status change to closed succesfully',
+                            success: true,
+                        });
+                    }
+                });
+
+            });
+
+        });
+    });
+
+};
+
+
+exports.dtUpdateTtSolution = function(req, res) {
+
+    let pramTt = req.body;
+    let updatedKey = {
+        "_id": req.body._id,
+        "dtTechnicianTickets._id": pramTt.tt_id,
+        "dtTechnicianTickets.tTicketID": pramTt.tTicketID
+    }
+
+    let updatedValue = {
+        "$set": {
+            "dtTechnicianTickets.$.tTicketSolution": req.body.tTicketSolution,
+            "dtTechnicianTickets.$.tTicketStatus": 'closed'
+        }
+    }
+
+    Dispatch.update(updatedKey, updatedValue, function(err) {
+        if (err) {
+            throw err
+        }
+
+        let _idTt = {
+            "_id": pramTt.tt_id,
+            "tTicketID": pramTt.tTicketID
+        }
+
+        let _valSolution = {
+            "updated":currentUTC,
+            "tTicketSolution": req.body.tTicketSolution,
+            "tTicketStatus": 'closed'
+        }
+
+        Tt.update(_idTt, _valSolution, function(ttErr) {
+            if (ttErr) {
+                throw ttErr
+            }
+            res.json({
+                message: 'Update Technician Ticket succesfully',
+                success: true
+            });
+        })
+
+    })
 };
