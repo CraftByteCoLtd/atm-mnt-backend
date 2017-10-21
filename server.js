@@ -38,7 +38,7 @@ mongoose.connect(configDB.database);
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({
-    extended: true
+    extended: false
 }));
 
 /*----------  Import Routes ----------*/
@@ -52,6 +52,7 @@ const technicianTicket = require('./api/routes/technicianTicket');
 const part	= require('./api/routes/part');
 const dispatchTicket = require('./api/routes/dispatchTicket');
 const treasury = require('./api/routes/treasury');
+const uploadFile = require('./api/routes/uploadFile')
 
 
 /*----------  Remove  ----------*/
@@ -80,6 +81,7 @@ app.use('/manage-tt', technicianTicket);
 app.use('/manage-part', part);
 app.use('/manage-dt', dispatchTicket);
 app.use('/manage-treasury', treasury);
+app.use('/manage-upload',uploadFile)
 
 
 

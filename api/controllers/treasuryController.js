@@ -40,7 +40,7 @@ exports.treasuryLogLastestGet = function(req, res) {
 
 
 exports.treasuryCreate = function(req, res) {
-    let newTreasury = treasury({
+    let newTreasury = Treasury({
         treasuryNote: req.body.treasuryNote,
         treasuryBalance: req.body.treasuryBalance,
         updated: req.body.atmUpdatedBy,
@@ -49,7 +49,13 @@ exports.treasuryCreate = function(req, res) {
 
     newTreasury.save(function(error) {
 
-        if (error)
+        if (error){
+            res.json({
+                message: 'Error! ',
+                success: false
+            });        
+        }
+        else
         {
             res.json({
                 message: 'Save new Treasury succesfully: ',

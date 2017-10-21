@@ -51,8 +51,6 @@ exports.dtUpdatePost = function(req, res) {
 
     Dispatch.findById(req.body.id, function(error, dpPrevInfo) {
 
-        console.log(JSON.stringify(req.body));
-
         if (error) throw error;
         dpPrevInfo.dtID = req.body.dtID;
         dpPrevInfo.dtResponsiblePersons = req.body.dtResponsiblePersons;
