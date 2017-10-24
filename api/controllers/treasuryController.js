@@ -58,7 +58,7 @@ exports.treasuryCreate = function(req, res) {
         else
         {
             res.json({
-                message: 'Save new Treasury succesfully: ',
+                message: 'Save new Treasury successfully: ',
                 success: true
             });
         }
@@ -101,7 +101,7 @@ exports.treasuryUpdatePost = function(req, res) {
 
 
             res.json({
-                message: 'Update Treasury Balance succesfully',
+                message: 'Update Treasury Balance successfully',
                 success: true
             });
 

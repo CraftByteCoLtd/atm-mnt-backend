@@ -38,7 +38,7 @@ exports.atmCreatePost = function(req, res) {
         if (error)
             if (error.code == 11000) {
                 res.json({
-                    message: 'Atm Machine ID : [' + newAtm.atmMachineID + '] exists! Please make sure the Machine ID is uniqe',
+                    message: 'Atm Machine ID : [' + newAtm.atmMachineID + '] exists! Please make sure the Machine ID is unique',
                     success: false
                 })
             } else {
