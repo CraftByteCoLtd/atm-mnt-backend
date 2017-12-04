@@ -10,6 +10,7 @@ http://localhost:3000/manage-upload/upload-file
 */
 router.post('/upload-file', uploadFileController.uploadFile);
 router.post('/update-balance', uploadFileController.updateAtmBalance);
+router.post('/upload-photo', uploadFileController.uploadPhoto);
 
 module.exports = router;
 

@@ -18,6 +18,7 @@ let dispatchSchema = new Schema({
         dtResponsiblePersons: [],
         dtAtms:[],
         dtTechnicianTickets: [],
+        dtManualTasks:[],
         dtStatus:{
             type: String,
             require:true
@@ -26,6 +27,7 @@ let dispatchSchema = new Schema({
             type: Number,
             require: true
         },
+        dtAssignmentDate:Date,
         created: Date,
         updated: Date
 

@@ -15,13 +15,16 @@ let currentUTC = moment().utc().toDate();
 
 
 exports.dtCreatePost = function(req, res) {
+
     let newDp = Dispatch({
         dtID: "new",
         dtResponsiblePersons: req.body.dtResponsiblePersons,
         dtAtms: req.body.dtAtms,
         dtTechnicianTickets: req.body.dtTechnicianTickets,
+        dtManualTasks:req.body.dtManualTasks,
         dtStatus: req.body.dtStatus,
         dtWithdrawBalance: req.body.dtWithdrawBalance,
+        dtAssignmentDate: moment(req.body.dtAssignmentDate),
         created: currentUTC,
         updated: currentUTC
     });
@@ -48,6 +51,8 @@ exports.dtCreatePost = function(req, res) {
 
 
 exports.dtUpdatePost = function(req, res) {
+    console.log(moment(req.body.dtAssignmentDate));
+
 
     Dispatch.findById(req.body.id, function(error, dpPrevInfo) {
 
@@ -56,8 +61,10 @@ exports.dtUpdatePost = function(req, res) {
         dpPrevInfo.dtResponsiblePersons = req.body.dtResponsiblePersons;
         dpPrevInfo.dtAtms = req.body.dtAtms;
         dpPrevInfo.dtTechnicianTickets = req.body.dtTechnicianTickets;
+        dpPrevInfo.dtManualTasks = req.body.dtManualTasks;
         dpPrevInfo.dtStatus = req.body.dtStatus;
         dpPrevInfo.dtWithdrawBalance = req.body.dtWithdrawBalance;
+        dpPrevInfo.dtAssignmentDate = moment(req.body.dtAssignmentDate);
         created = req.body.created;
         updated = currentUTC;
 
@@ -283,8 +290,10 @@ exports.dtDetailGet = function(req, res) {
 
 exports.dtListGet = function(req, res) {
     Dispatch.find({})
-        .select('dtID updated dtStatus')
+        // .select('dtID updated dtStatus')
         .sort('-updated')
+        .where('dtStatus').equals('closed')
+        .limit(100)
         .exec(function(error, result) {
             if (error)
                 res.send(error);
@@ -299,7 +308,7 @@ exports.dtListGet = function(req, res) {
 
 exports.dtActiveListGet = function(req, res) {
     Dispatch.find({})
-        // .where('dtStatus').ne('closed')
+        .where('dtStatus').ne('closed')
         .sort('-updated')
         .exec(function(error, result) {
             if (error)
@@ -316,8 +325,6 @@ exports.dtActiveListGet = function(req, res) {
 exports.dtDoWithdrawPost = function(req, res) {
 
     Dispatch.findById(req.body.id, function(error, dpPrevInfo) {
-
-        console.log(JSON.stringify(req.body));
 
         if (error) throw error;
 

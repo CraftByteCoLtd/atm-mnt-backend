@@ -33,6 +33,7 @@ exports.companyDetailByIdGet = function(req, res) {
 exports.companyListGet = function(req, res) {
     CompanyProfile.find({})
         .sort('-created')
+        .limit(1)
         .exec(function(error, result) {
             if (error)
                 res.send(error);
@@ -48,19 +49,23 @@ exports.companyListGet = function(req, res) {
 exports.companyProfileCreatePost = function(req, res) {
     //Create A new User in the database
 
+     CompanyProfile.remove({}, function(error) {
+                console.log('removed');
+            });
+
     let newCompanyProfile = new CompanyProfile({
         companyId: req.body.companyId,
         companyName: req.body.companyName,
         companyDetail: req.body.companyDetail,
         companyOwner: req.body.companyOwner,
-        companyPhones: req.body.companyPhones,
-        companyEmails: req.body.companyEmails,
+        companyPhone: req.body.companyPhone,
+        companyEmail: req.body.companyEmail,
         companyLogo: req.body.companyLogo,
-        companyAdminUsername: req.body.companyAdminUsername,
-        companyAdminPwd: req.body.companyAdminPwd,
         companyIsActive: req.body.companyIsActive,
         created: currentUTC
     });
+
+   
 
     //  Persist the new user into the database
     newCompanyProfile.save(function(error) {
@@ -105,10 +110,9 @@ exports.companyUpdatePost = function(req, res) {
         companyPrevInfo.companyName = req.body.companyName;
         companyPrevInfo.companyDetail = req.body.companyDetail;
         companyPrevInfo.companyOwner = req.body.companyOwner;
-        companyPrevInfo.companyPhones = req.body.companyPhones;
-        companyPrevInfo.companyEmails = req.body.companyEmails;
+        companyPrevInfo.companyPhone = req.body.companyPhone;
+        companyPrevInfo.companyEmail = req.body.companyEmail;
         companyPrevInfo.companyLogo = req.body.companyLogo;
-        companyPrevInfo.companyAdminUsername = req.body.companyAdminUsername;
         companyPrevInfo.companyIsActive = req.body.companyIsActive;
 
         companyPrevInfo.save(function(error) {

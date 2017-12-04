@@ -28,7 +28,7 @@ let upload = multer({ //multer settings
     storage: storage,
     fileFilter: function(req, file, callback) {
         let ext = path.extname(file.originalname);
-        if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg' && ext !== '.csv') {
+        if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg' && ext !== '.csv') {
             return callback(new Error('Only image,csv are allowed'))
         }
         callback(null, true)
@@ -153,7 +153,6 @@ exports.uploadFile = function(req, res) {
 
     upload(req, res, function(err) {
         if (err) {
-            console.log(err);
             res.json({
                 message: err,
                 success: false
@@ -164,6 +163,46 @@ exports.uploadFile = function(req, res) {
         }
     });
 };
+
+
+exports.uploadPhoto = function(req, res) {
+
+    upload(req, res, function(err) {
+        if (err) {
+            res.json({
+                message: err,
+                success: false
+            });
+
+        } else {
+            
+            var dirPath = './public/logo/'
+            var oldPath = req.file.path;
+            var newPath =  dirPath+ req.file.filename;
+
+            // Remove the files in logo
+            fs.readdir(dirPath,function(err, files){
+                if (err) return;
+                files.forEach(function(f){
+                    console.log(f);
+                    fs.unlink(dirPath + f,function(err){ if(err)console.log(err);});
+                })
+            })
+
+            // Move file from uploaded directory to public directory
+            fs.rename(oldPath, newPath, function (err) {
+              if (err) throw err
+              console.log('Successfully moved file to public dir!')
+            })
+
+             res.json({
+                message: 'http://'+req.headers.host+'/logo/' + req.file.filename,
+                success: true
+            });
+        }
+    });
+};
+
 
 exports.updateAtmBalance = function(req, res){
 

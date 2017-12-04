@@ -5,9 +5,6 @@
 let mongoose = require('mongoose');
 let moment = require('moment');
 
-
-let crypto = require('crypto');
-
 let Schema = mongoose.Schema;
 let companyProfileSchema = new Schema({
         companyId: {
@@ -28,25 +25,15 @@ let companyProfileSchema = new Schema({
             type: String,
             require: true
         },
-        companyEmails: [{
-            desc: String,
-            email: String
-        }],
-        companyPhones: [{
-            desc: String,
-            number: String
-        }],
-        companyLogo: {
+        companyEmail: {
             type: String,
             require: true
         },
-        companyAdminUsername: {
+        companyPhone: {
             type: String,
-            require: true,
-            unique: true
-
+            require: true
         },
-        companyAdminPwd: {
+        companyLogo: {
             type: String,
             require: true
         },
@@ -73,9 +60,6 @@ companyProfileSchema.virtual('url')
         return '/manage-company/company/' + this._id;
     });
 
-companyProfileSchema.methods.hash = function(inputText) {
-    return crypto.createHash('sha1').update(inputText).digest('base64');
-}
 
 companyProfileSchema.pre('save', function(next) {
 
@@ -83,9 +67,6 @@ companyProfileSchema.pre('save', function(next) {
 
     // change the updated_at field to current date
     this.updated = currentDate;
-
-    // update the hash password
-    this.companyAdminPwd = this.hash(this.companyAdminPwd);
     next();
 });
 

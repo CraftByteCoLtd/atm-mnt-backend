@@ -24,8 +24,8 @@ app.use(function(req, res, next) {
         next();
 });
 
-app.use(express.static('public'))
-
+app.use(express.static('public'));
+app.use('/logo',express.static('public/logo'));
 
 app.set('superDuperSecret',configJWT.secret);
 
